@@ -1,22 +1,24 @@
-import { Component, ReactNode } from "react";
+import { useState } from "react";
 import { toggleTheme } from "../services/theme";
 
-export class Header extends Component {
-    state = {
-        darkTheme: false
+export const Header = () => {
+    const [darkTheme,setDarkTheme] = useState<boolean>(false);
+    const [user, setUser] = useState<string>("Vasya");
+
+    const onToggleTheme = () => {
+        toggleTheme(darkTheme);
+        setDarkTheme(!darkTheme);
     }
-    onToggleTheme = () => {
-        toggleTheme(this.state.darkTheme);
-        this.setState({darkTheme: !this.state.darkTheme})
+    const onChangeUser = (name: string) => {
+        setUser(name)
     }
-    render(): ReactNode {
-        return (
-            <header>
-                <div className="theme_toogle">
-                    <button className="theme_toogle_btn" onClick={() => this.onToggleTheme()}></button>
-                </div>
-                <span className="heading">My Day</span>
-            </header>
-        )
-    }
+    return (
+        <header>
+            <div className="theme_toogle">
+                <button className="theme_toogle_btn" onClick={() => onToggleTheme()}></button>
+            </div>
+            <span className="heading">{user}'s Day</span>
+            <button onClick={()=>onChangeUser("John")}>Change user</button>
+        </header>
+    )
 }

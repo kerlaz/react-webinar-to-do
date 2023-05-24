@@ -1,32 +1,24 @@
-import { Component, ReactNode } from "react";
+import { FC, useState } from "react";
 
-export class Footer extends Component<{addTask: (text: string) => void}> {
-    state = {
-        task: "",
-    }
-    onChange = (e: any) => {
-        this.setState({task: e.target.value})
-    }
-    onSubmit = (e: any) => {
+export const Footer: FC<{ addTask: (text: string) => void }> = ({ addTask }) => {
+    const [task, setTask] = useState("")
+    
+    const onSubmit = (e: any) => {
         e.preventDefault();
-        const newTask = this.state.task;
-        if(!newTask || newTask.length < 3) return;
-        console.log(newTask);
-        this.props.addTask(newTask);
-        this.setState({task: ""});
+        if (!task || task.length < 3) return;
+        addTask(task);
+        setTask("");
     }
-    render(): ReactNode {
-        return (
-            <footer>
-                <form id="new_task_form" onSubmit={e => this.onSubmit(e)}>
-                    <input type="text" name="new_task_input"
-                        id="new_task_input" placeholder="Create New Task"
-                        value={this.state.task}
-                        onChange={e => this.onChange(e)}
-                        />
-                    <button id="new_task_input_btn" type="submit"></button>
-                </form>
-            </footer>
-        )
-    }
+    return (
+        <footer>
+            <form id="new_task_form" onSubmit={e => onSubmit(e)}>
+                <input type="text" name="new_task_input"
+                    id="new_task_input" placeholder="Create New Task"
+                    value={task}
+                    onChange={e => setTask(e.target.value)}
+                />
+                <button id="new_task_input_btn" type="submit"></button>
+            </form>
+        </footer>
+    )
 }

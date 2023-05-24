@@ -1,17 +1,16 @@
-import { Component, ReactNode } from "react";
+import { FC } from "react";
 import { TTask } from "../types/task";
 
-export class Task extends Component<{taskData: TTask, remove: (id: string) => void}> {
-    onRemove = () => {
-        // console.log(this.props.id)
-        this.props.remove(this.props.taskData.id)
+type TTaskProps = { taskData: TTask, remove: (id: string) => void };
+
+export const Task: FC<TTaskProps> = ({ taskData, remove }) => {
+    const onRemove = () => {
+        remove(taskData.id)
     }
-    render(): ReactNode {
-        return (
-            <li className="task_item">
-                <div className="task_check_btn" onClick={()=>this.onRemove()}></div>
-                <span className="task_bio">{this.props.taskData.text}</span>
-            </li>
-        )
-    }
+    return (
+        <li className="task_item">
+            <div className="task_check_btn" onClick={() => onRemove()}></div>
+            <span className="task_bio">{taskData.text}</span>
+        </li>
+    )
 }

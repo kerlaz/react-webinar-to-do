@@ -1,50 +1,51 @@
-import { Component, ReactNode } from 'react'
-import './App.css'
+import { useState } from 'react'
+import './App.scss'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { Task } from './components/Task'
 import { nanoid } from 'nanoid'
 import { TTask } from './types/task'
 
-class App extends Component<{},{tasks: TTask[]}> {
-  state = {
-    tasks: [
-      { text: "First task", id: "abscd"},
-      { text: "Second task", id: "yiuwer8487"},
-    ]
-  }
-  addTask = (text: string) => {
+const App = () => {
+  const [tasks, setTasks] = useState<TTask[]>([
+    { text: "First task", id: "abscd"},
+    { text: "Second task", id: "yiuwer8487"},
+  ])
+  const [headerVisibility,setHeaderVisibility] = useState(true);
+  const toggleHeader = () => {
+    setHeaderVisibility(!headerVisibility);
+  };
+  const addTask = (text: string) => {
     const newTask: TTask = {
       id: nanoid(),
       text
     }
     const updatedTasks = [
-      ...this.state.tasks,
+      ...tasks,
       newTask
     ]
-    this.setState({tasks: updatedTasks})
+    setTasks(updatedTasks)
   }
-  removeTask = (id: string) => {
-    const updatedTasks = this.state.tasks.filter(task => task.id !== id);
-    this.setState({tasks: updatedTasks})
+  const removeTask = (id: string) => {
+    const updatedTasks = tasks.filter(task => task.id !== id);
+    setTasks(updatedTasks)
   }
-  render(): ReactNode {
-    return (
-      <div className="container task_list_empty">
-        <Header />
-        <section className="tasks">
-            <ul id="tasksList">
-              {this.state.tasks.map((task) => (
+  return (
+    <div className="container task_list_empty">
+      <button onClick={toggleHeader}>Toggle Header: {headerVisibility ? "On" : "Off"}</button>
+        {headerVisibility ? <Header /> : <p>mini header</p>}
+        <section className={headerVisibility ? "tasks" : "tasks mini"}>
+            <ul id="tasksList" style={{background: headerVisibility ? "black" : "tomato"}}>
+              {tasks.map((task) => (
                 <Task key={`task-${task.id}`} 
                 taskData={task}
-                remove={this.removeTask.bind(this)}/>
+                remove={removeTask}/>
               ))}
             </ul>
         </section>
-        <Footer addTask={this.addTask.bind(this)} />
+        <Footer addTask={addTask} />
     </div>
-    )
-  }
+  )
 }
 
 export default App
